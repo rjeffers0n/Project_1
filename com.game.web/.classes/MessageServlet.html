@@ -1,0 +1,178 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: MessageServlet</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../coverage_reports/index.html">all classes</a> ]
+    [ <a href="../index.html">com.game.web</a> ]
+</div>
+
+<h1>Coverage Summary for Class: MessageServlet (com.game.web)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MessageServlet</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 33)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.game.web;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.game.models.Message;
+<i>4</i>&nbsp;import com.game.service.accountservices.AccountDetailService;
+<i>5</i>&nbsp;import com.game.service.accountservices.AccountDetailServiceImp;
+<i>6</i>&nbsp;import com.game.service.accountservices.ModificationService;
+<i>7</i>&nbsp;import com.game.service.messageservices.MessageService;
+<i>8</i>&nbsp;import com.google.gson.Gson;
+<i>9</i>&nbsp;import com.google.gson.GsonBuilder;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;import javax.servlet.RequestDispatcher;
+<i>12</i>&nbsp;import javax.servlet.ServletConfig;
+<i>13</i>&nbsp;import javax.servlet.ServletContext;
+<i>14</i>&nbsp;import javax.servlet.ServletException;
+<i>15</i>&nbsp;import javax.servlet.http.HttpServlet;
+<i>16</i>&nbsp;import javax.servlet.http.HttpServletRequest;
+<i>17</i>&nbsp;import javax.servlet.http.HttpServletResponse;
+<i>18</i>&nbsp;import javax.servlet.http.HttpSession;
+<i>19</i>&nbsp;import java.io.IOException;
+<i>20</i>&nbsp;import java.io.Writer;
+<i>21</i>&nbsp;import java.util.List;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;/**
+<i>24</i>&nbsp; * handles messaging related requests
+<i>25</i>&nbsp; */
+<b class="nc"><i>26</i>&nbsp;public class MessageServlet extends HttpServlet {</b>
+<i>27</i>&nbsp;    MessageService messageService;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    public void init(ServletConfig config) throws ServletException {
+<b class="nc"><i>30</i>&nbsp;        ServletContext context = config.getServletContext();</b>
+<b class="nc"><i>31</i>&nbsp;        messageService = (MessageService) context.getAttribute(&quot;messageService&quot;);</b>
+<i>32</i>&nbsp;    }
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    /**
+<i>35</i>&nbsp;     * Sends a message saving it to the message repository
+<i>36</i>&nbsp;     * @param req request -holds toUser and content parameter
+<i>37</i>&nbsp;     * @param resp response - confirms if message has been sent
+<i>38</i>&nbsp;     * @throws ServletException
+<i>39</i>&nbsp;     * @throws IOException
+<i>40</i>&nbsp;     */
+<i>41</i>&nbsp;    @Override
+<i>42</i>&nbsp;    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+<b class="nc"><i>43</i>&nbsp;        if (!req.isRequestedSessionIdValid()){</b>
+<b class="nc"><i>44</i>&nbsp;            resp.sendRedirect(&quot;index.html&quot;);</b>
+<i>45</i>&nbsp;        }
+<b class="nc"><i>46</i>&nbsp;        HttpSession session = req.getSession();</b>
+<b class="nc"><i>47</i>&nbsp;        String username = (String) session.getAttribute(&quot;username&quot;);</b>
+<b class="nc"><i>48</i>&nbsp;        String toUser = req.getParameter(&quot;toWho&quot;);</b>
+<b class="nc"><i>49</i>&nbsp;        String content = req.getParameter(&quot;messageContent&quot;);</b>
+<b class="nc"><i>50</i>&nbsp;        if (content==null){</b>
+<b class="nc"><i>51</i>&nbsp;            content=&quot;&quot;;</b>
+<i>52</i>&nbsp;        }
+<b class="nc"><i>53</i>&nbsp;        messageService.send(username, toUser, content);</b>
+<i>54</i>&nbsp;        //if we want website-wide messaging, include url from the request
+<b class="nc"><i>55</i>&nbsp;        resp.sendRedirect(&quot;pages/portal.html&quot;);</b>
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    }
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    /**
+<i>60</i>&nbsp;     * Gets the list of messages to display
+<i>61</i>&nbsp;     * @param req request
+<i>62</i>&nbsp;     * @param resp response
+<i>63</i>&nbsp;     * @throws ServletException
+<i>64</i>&nbsp;     * @throws IOException
+<i>65</i>&nbsp;     */
+<i>66</i>&nbsp;    @Override
+<i>67</i>&nbsp;    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+<b class="nc"><i>68</i>&nbsp;        if (!req.isRequestedSessionIdValid()){</b>
+<b class="nc"><i>69</i>&nbsp;            resp.sendRedirect(&quot;index.html&quot;);</b>
+<i>70</i>&nbsp;        }
+<b class="nc"><i>71</i>&nbsp;        HttpSession session = req.getSession();</b>
+<b class="nc"><i>72</i>&nbsp;        String username = (String) session.getAttribute(&quot;username&quot;);</b>
+<b class="nc"><i>73</i>&nbsp;        List&lt;Message&gt; messageList = messageService.getMessageList(username);</b>
+<b class="nc"><i>74</i>&nbsp;        String messageJSON = &quot;&quot;;</b>
+<b class="nc"><i>75</i>&nbsp;        Writer out = resp.getWriter();</b>
+<b class="nc"><i>76</i>&nbsp;        resp.setContentType(&quot;application/json&quot;);</b>
+<b class="nc"><i>77</i>&nbsp;        resp.setCharacterEncoding(&quot;UTF-8&quot;);</b>
+<b class="nc"><i>78</i>&nbsp;        Gson gson = new GsonBuilder().create();</b>
+<b class="nc"><i>79</i>&nbsp;        messageJSON = gson.toJson(messageList);</b>
+<b class="nc"><i>80</i>&nbsp;        out.write(messageJSON);</b>
+<b class="nc"><i>81</i>&nbsp;        out.flush();</b>
+<b class="nc"><i>82</i>&nbsp;        out.close();</b>
+<i>83</i>&nbsp;    }
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;    @Override
+<i>86</i>&nbsp;    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+<b class="nc"><i>87</i>&nbsp;        if (!req.isRequestedSessionIdValid()){</b>
+<b class="nc"><i>88</i>&nbsp;            resp.sendRedirect(&quot;index.html&quot;);</b>
+<i>89</i>&nbsp;        }
+<b class="nc"><i>90</i>&nbsp;        HttpSession session = req.getSession();</b>
+<b class="nc"><i>91</i>&nbsp;        String username = (String) session.getAttribute(&quot;username&quot;);</b>
+<b class="nc"><i>92</i>&nbsp;        messageService.clear(username);</b>
+<b class="nc"><i>93</i>&nbsp;        resp.sendRedirect(&quot;pages/portal.html&quot;);</b>
+<i>94</i>&nbsp;    }
+<i>95</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-08 01:33</div>
+</div>
+</body>
+</html>

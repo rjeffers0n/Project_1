@@ -1,0 +1,131 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ItemSQLRepo</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../coverage_reports/index.html">all classes</a> ]
+    [ <a href="../index.html">com.game.data</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ItemSQLRepo (com.game.data)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ItemSQLRepo</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 7)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.game.data;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.game.models.Item;
+<i>4</i>&nbsp;import com.game.utils.ConnectionUtils;
+<i>5</i>&nbsp;import org.apache.log4j.Logger;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;import java.util.List;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;public class ItemSQLRepo implements Repository&lt;Item, Integer&gt; {
+<i>10</i>&nbsp;    private ConnectionUtils connectionUtils;
+<b class="nc"><i>11</i>&nbsp;    static final Logger logger = Logger.getLogger(ItemSQLRepo.class);</b>
+<i>12</i>&nbsp;
+<b class="nc"><i>13</i>&nbsp;    public ItemSQLRepo(ConnectionUtils connectionUtils) {</b>
+<b class="nc"><i>14</i>&nbsp;        if (connectionUtils != null) {</b>
+<b class="nc"><i>15</i>&nbsp;            this.connectionUtils = connectionUtils;</b>
+<i>16</i>&nbsp;        }
+<i>17</i>&nbsp;    }
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;    @Override
+<i>20</i>&nbsp;    public Item findById(Integer i) {
+<b class="nc"><i>21</i>&nbsp;        return null;</b>
+<i>22</i>&nbsp;    }
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    @Override
+<i>25</i>&nbsp;    public List&lt;Item&gt; findAll() {
+<b class="nc"><i>26</i>&nbsp;        return null;</b>
+<i>27</i>&nbsp;    }
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    @Override
+<i>30</i>&nbsp;    public List&lt;Integer&gt; findAllID() {
+<b class="nc"><i>31</i>&nbsp;        return null;</b>
+<i>32</i>&nbsp;    }
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    @Override
+<i>35</i>&nbsp;    public void save(Item obj) {
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    }
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    @Override
+<i>40</i>&nbsp;    public void update(Item obj, Integer id) {
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    }
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    @Override
+<i>45</i>&nbsp;    public void delete(Integer i) {
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    }
+<i>48</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-08 01:33</div>
+</div>
+</body>
+</html>

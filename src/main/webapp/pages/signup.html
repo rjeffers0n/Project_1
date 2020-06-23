@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up Page</title>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/cosmo/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../stylesheet/customstyles.css">
+</head>
+<body>
+<!--header-->
+<h1 class="container p-3 my-3 bg-dark text-white">New Account</h1>
+<!--container-->
+<aside id="container" class="container p-2 bg-white text-dark" >
+    <form method="post" action="../create" class="bg-light">
+        <div id="user_group">
+            <label for="username">Username:</label>
+            <input id="username" type="text" name="username" class="form-control" placeholder="Enter username"/>
+        </div>
+        <div id=pass_group">
+            <label for="password">Password:</label>
+            <input id="password" type="password" name="password" class="form-control" placeholder="Enter password"/>
+        </div>
+        <div id=confirmpass">
+            <label for="confirmpass">Confirm Password:</label>
+            <input id="confirmpass" type="password" name="password" class="form-control" placeholder="Enter password"/>
+        </div>
+        <div id=email_group">
+            <label for="email">Email:</label>
+            <input id="email" type="text" name="email" class="form-control" placeholder="Enter email"/>
+        </div>
+        <div id="btn_group">
+            <button id="create_acct" class="btn-dark" type="submit">Create Account</button>
+            <button id="cancel" class="btn-dark" type="submit">Cancel</button>
+        </div>
+    </form>
+</aside>
+<script>
+    document.querySelector('#create_acct').addEventListener('click', (e) => {
+        let inpt1 = document.querySelector('#username');
+        let inpt2 = document.querySelector('#password');
+        let inpt3 = document.querySelector('#confirmpass');
+        let name = inpt1.value;
+        let password = inpt2.value;
+        let password2 = inpt3.value;
+        if(name.length === 0 || password !== password2 || password.length<8 || !/\d/.test(password) || !/[a-z]/.test(password) || !/[A-Z]/.test(password)) {
+            alert("Password needs to be >=8 char and contains at least 1 uppercase," +
+                " lowercase and number each. Username should be at least 1 character long.");
+            e.preventDefault();
+        }
+    });
+    document.querySelector('#cancel').addEventListener('click', (e) => {
+        e.preventDefault();
+        location.href="../index.html";
+    });
+</script>
+</body>
+</html>

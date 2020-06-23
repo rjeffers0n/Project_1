@@ -1,0 +1,134 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: MessageServiceImp</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../coverage_reports/index.html">all classes</a> ]
+    [ <a href="../index.html">com.game.service.messageservices</a> ]
+</div>
+
+<h1>Coverage Summary for Class: MessageServiceImp (com.game.service.messageservices)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MessageServiceImp</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (2/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    76.5%
+  </span>
+  <span class="absValue">
+    (13/ 17)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.game.service.messageservices;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.game.data.MessageSQLRepo;
+<i>4</i>&nbsp;import com.game.models.Message;
+<i>5</i>&nbsp;import com.game.service.accountservices.AccountDetailService;
+<i>6</i>&nbsp;import org.apache.log4j.Logger;
+<i>7</i>&nbsp;import java.sql.Timestamp;
+<i>8</i>&nbsp;import java.util.List;
+<i>9</i>&nbsp;import org.apache.log4j.BasicConfigurator;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;public class MessageServiceImp implements MessageService{
+<i>12</i>&nbsp;    private final MessageSQLRepo mrepo;
+<i>13</i>&nbsp;    private final AccountDetailService accountDetailService;
+<b class="fc"><i>14</i>&nbsp;    private final Logger logger = Logger.getLogger(MessageServiceImp.class);</b>
+<i>15</i>&nbsp;
+<b class="fc"><i>16</i>&nbsp;    public MessageServiceImp(MessageSQLRepo mrepo, AccountDetailService accountDetailService) {</b>
+<b class="fc"><i>17</i>&nbsp;        BasicConfigurator.configure();</b>
+<b class="fc"><i>18</i>&nbsp;        this.mrepo = mrepo;</b>
+<b class="fc"><i>19</i>&nbsp;        this.accountDetailService = accountDetailService;</b>
+<b class="fc"><i>20</i>&nbsp;    }</b>
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    /**
+<i>23</i>&nbsp;     * Creates and add message to the message list and call the repo&#39;s save method to
+<i>24</i>&nbsp;     * add the record to the database.
+<i>25</i>&nbsp;     * @return
+<i>26</i>&nbsp;     */
+<i>27</i>&nbsp;    public boolean send(String from, String to, String content) {
+<b class="fc"><i>28</i>&nbsp;        if(accountDetailService.checkExist(to)&amp;&amp;to!=null) {</b>
+<b class="fc"><i>29</i>&nbsp;            Timestamp timestamp = new Timestamp(System.currentTimeMillis());</b>
+<b class="fc"><i>30</i>&nbsp;            Message temp = new Message(content, to, timestamp, from);</b>
+<b class="fc"><i>31</i>&nbsp;            mrepo.save(temp);</b>
+<b class="fc"><i>32</i>&nbsp;            logger.debug(&quot;Message sent&quot;);</b>
+<b class="fc"><i>33</i>&nbsp;            return true;</b>
+<i>34</i>&nbsp;        }
+<b class="fc"><i>35</i>&nbsp;        return false;</b>
+<i>36</i>&nbsp;    }
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    /**
+<i>39</i>&nbsp;     * deletes all messages to and from that user
+<i>40</i>&nbsp;     */
+<i>41</i>&nbsp;    @Override
+<i>42</i>&nbsp;    public void clear(String name) {
+<b class="nc"><i>43</i>&nbsp;        mrepo.clear(name);</b>
+<b class="nc"><i>44</i>&nbsp;        logger.debug(&quot;All messages deleted&quot;);</b>
+<b class="nc"><i>45</i>&nbsp;    }</b>
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    @Override
+<i>48</i>&nbsp;    public List&lt;Message&gt; getMessageList(String username) {
+<b class="nc"><i>49</i>&nbsp;        return mrepo.findAllbyName(username);</b>
+<i>50</i>&nbsp;    }
+<i>51</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-08 01:33</div>
+</div>
+</body>
+</html>

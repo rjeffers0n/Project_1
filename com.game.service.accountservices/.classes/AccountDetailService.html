@@ -1,0 +1,66 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: AccountDetailService</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../coverage_reports/index.html">all classes</a> ]
+    [ <a href="../index.html">com.game.service.accountservices</a> ]
+</div>
+
+<h1>Coverage Summary for Class: AccountDetailService (com.game.service.accountservices)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">AccountDetailService</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.game.service.accountservices;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.game.models.Account;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import java.util.List;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;public interface AccountDetailService {
+<i>8</i>&nbsp;    boolean checkExist(String username);
+<i>9</i>&nbsp;    Account findByID(String username);
+<i>10</i>&nbsp;    boolean checkCredentials(String username, String password);
+<i>11</i>&nbsp;    Account getAccount(String username);
+<i>12</i>&nbsp;    List&lt;String&gt; getAccountList();
+<i>13</i>&nbsp;    boolean addAccount(String username, String password, String email);
+<i>14</i>&nbsp;    boolean removeAccount(String username);
+<i>15</i>&nbsp;    void update(Account obj);
+<i>16</i>&nbsp;    void logOff(String username);
+<i>17</i>&nbsp;    boolean usernameValidations(String username);
+<i>18</i>&nbsp;    boolean passwordValidations(String password);
+<i>19</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-08 01:33</div>
+</div>
+</body>
+</html>

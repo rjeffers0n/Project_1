@@ -1,0 +1,74 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Repository</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../coverage_reports/index.html">all classes</a> ]
+    [ <a href="../index.html">com.game.data</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Repository (com.game.data)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">Repository</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.game.data;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import java.util.List;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;// DAO interface can be used by any means to persist data
+<i>6</i>&nbsp;public interface Repository&lt;T, ID&gt; {
+<i>7</i>&nbsp;    //modified parameters as each row has a unique ID, so another object parameter is redundant
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;    //return object from the id
+<i>10</i>&nbsp;    T findById(ID id);
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;    //creates a list of objects from all the rows
+<i>13</i>&nbsp;    List&lt;T&gt; findAll();
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;    //creates a list of ids from all the rows
+<i>16</i>&nbsp;    List&lt;ID&gt; findAllID();
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    //insert a new row with the object, do we really need to return anything?
+<i>19</i>&nbsp;    void save(T obj);
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    //updated row with new attributes
+<i>22</i>&nbsp;    void update(T obj, ID id);
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    //delete row with corresponding id
+<i>25</i>&nbsp;    void delete(ID id);
+<i>26</i>&nbsp;}
+<i>27</i>&nbsp;
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-08 01:33</div>
+</div>
+</body>
+</html>

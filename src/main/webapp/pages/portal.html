@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>portal</title>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/cosmo/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../stylesheet/customstyles.css">
+</head>
+<body>
+<!--header-->
+<h1 class="container p-3 my-3 bg-dark text-white">Welcome to P1 Game Portal</h1>
+<!--container-->
+<aside id="container" class="container p-2 bg-white text-dark" >
+<!--nav tabs-->
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" href="#">Portal</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link disabled" href="./store.html">Store</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="./games.html">Games</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link disabled" href="./news.html">News</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="./myprofile.html">My Profile</a>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" onclick="signOff()">Sign Off</button>
+        </li>
+    </ul>
+<!--    messages-->
+    <div id="messages" class="panel-collapse collapse" onclick="refresh()">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse1">user1</a>
+            </h4>
+        </div>
+        <div id="collapse1" class="panel-collapse collapse">
+            <div class="panel-body" id="ajax-content">Panel Body</div>
+        </div>
+    </div>
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#messages">Messages</a>
+        </h4>
+    </div>
+    <button type = "button" onclick = "clearMessage()">Clear Messages</button>
+    <section>
+        <form method="post" action="../message" class="bg-light">
+            <div id="user_group">
+                <label for="messageSend">Message:</label>
+                <input id="messageSend" type="text" name="messageSend" class="form-control" placeholder="Enter message"/>
+                <label for="toWho">To:</label>
+                <input id="toWho" type="text" name="toWho" class="form-control" placeholder="Who to?"/>
+            </div>
+            <button id="send" class="btn-dark" type="submit">Send</button>
+        </form>
+    </section>
+</aside>
+
+<script>
+    let http_request;
+    let messageList = {};
+    // <--If 1 tabs is selected under the class panel heading is selected, collapse all other message panels-->
+    function loadJSONObject() {
+        //code from https://www.tutorialspoint.com/json/json_ajax_example.htm
+        http_request=new XMLHttpRequest();
+        try{
+            // Opera 8.0+, Firefox, Chrome, Safari
+            http_request = new XMLHttpRequest();
+        }catch (e) {
+            // Internet Explorer Browsers
+            try{
+                http_request = new ActiveXObject("Msxml2.XMLHTTP");
+            }catch (e) {
+                try{
+                    http_request = new ActiveXObject("Microsoft.XMLHTTP");
+                }catch (e) {
+                    // Something went wrong
+                    alert("Your browser broke!");
+                    return false;
+                }
+            }
+        }
+        http_request.onreadystatechange = function() {
+            if (http_request.readyState === 4 ) {
+                messageList = JSON.parse(http_request.responseText);
+                let body = document.getElementById('ajax-content');
+                let messageString = "";
+                for(let i = 0; i<messageList.length; i++){
+                    messageString += messageList[i].fromuser + "->" + messageList[i].messageContent +
+                    "->" + messageList[i].touser + " : " + messageList[i].messageTime + "<br/>";
+                }
+                body.innerHTML = messageString;
+            }
+        }
+        http_request.open("GET","../message",true);
+        http_request.send();
+    }
+    function refresh() {
+        loadJSONObject();
+    }
+    function clearMessage() {
+        http_request=new XMLHttpRequest();
+        try{
+            // Opera 8.0+, Firefox, Chrome, Safari
+            http_request = new XMLHttpRequest();
+        }catch (e) {
+            // Internet Explorer Browsers
+            try{
+                http_request = new ActiveXObject("Msxml2.XMLHTTP");
+            }catch (e) {
+                try{
+                    http_request = new ActiveXObject("Microsoft.XMLHTTP");
+                }catch (e) {
+                    // Something went wrong
+                    alert("Your browser broke!");
+                    return false;
+                }
+            }
+        }
+        http_request.onreadystatechange = function() {
+            if (http_request.readyState === 4 && http_request.status >= 200 && http_request.status<=300) {
+                console.log("Delete Successful");
+                refresh();
+            }
+        }
+        http_request.open("DELETE","../message");
+        http_request.send();
+    }
+    function signOff() {
+        http_request=new XMLHttpRequest();
+        try{
+            // Opera 8.0+, Firefox, Chrome, Safari
+            http_request = new XMLHttpRequest();
+        }catch (e) {
+            // Internet Explorer Browsers
+            try{
+                http_request = new ActiveXObject("Msxml2.XMLHTTP");
+            }catch (e) {
+                try{
+                    http_request = new ActiveXObject("Microsoft.XMLHTTP");
+                }catch (e) {
+                    // Something went wrong
+                    alert("Your browser broke!");
+                    return false;
+                }
+            }
+        }
+        http_request.open("GET","../logout");
+        http_request.send();
+        document.cookie = "cookiename= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+        window.location.href="../";
+    }
+</script>
+</body>
+</html>

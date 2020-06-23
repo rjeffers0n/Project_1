@@ -1,0 +1,139 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: PortalContextListener</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../coverage_reports/index.html">all classes</a> ]
+    [ <a href="../index.html">com.game.system</a> ]
+</div>
+
+<h1>Coverage Summary for Class: PortalContextListener (com.game.system)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PortalContextListener</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 21)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.game.system;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.game.data.AccountSQLRepo;
+<i>4</i>&nbsp;import com.game.data.MessageSQLRepo;
+<i>5</i>&nbsp;import com.game.data.Repository;
+<i>6</i>&nbsp;import com.game.models.Account;
+<i>7</i>&nbsp;import com.game.service.accountservices.*;
+<i>8</i>&nbsp;import com.game.service.messageservices.MessageService;
+<i>9</i>&nbsp;import com.game.service.messageservices.MessageServiceImp;
+<i>10</i>&nbsp;import com.game.utils.ConnectionUtils;
+<i>11</i>&nbsp;import com.game.utils.PostgresConnectionUtil;
+<i>12</i>&nbsp;import org.apache.log4j.Logger;
+<i>13</i>&nbsp;import javax.servlet.ServletContext;
+<i>14</i>&nbsp;import javax.servlet.ServletContextEvent;
+<i>15</i>&nbsp;import javax.servlet.ServletContextListener;
+<i>16</i>&nbsp;import java.io.IOException;
+<i>17</i>&nbsp;import java.io.InputStream;
+<i>18</i>&nbsp;import java.util.Properties;
+<i>19</i>&nbsp;
+<b class="nc"><i>20</i>&nbsp;public class PortalContextListener  implements ServletContextListener {</b>
+<b class="nc"><i>21</i>&nbsp;    static final Logger logger = Logger.getLogger(PortalContextListener.class);</b>
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;    @Override
+<i>24</i>&nbsp;    public void contextInitialized(ServletContextEvent servletContextEvent) {
+<b class="nc"><i>25</i>&nbsp;        ServletContext context = servletContextEvent.getServletContext();</b>
+<b class="nc"><i>26</i>&nbsp;        Properties prop = new Properties();</b>
+<b class="nc"><i>27</i>&nbsp;        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(&quot;db.properties&quot;);</b>
+<i>28</i>&nbsp;        try {
+<b class="nc"><i>29</i>&nbsp;            prop.load(inputStream);</b>
+<b class="nc"><i>30</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>31</i>&nbsp;            logger.debug(&quot;db.properties not found&quot;);</b>
+<b class="nc"><i>32</i>&nbsp;        }</b>
+<b class="nc"><i>33</i>&nbsp;        ConnectionUtils connection = new PostgresConnectionUtil(prop.getProperty(&quot;url&quot;),</b>
+<b class="nc"><i>34</i>&nbsp;                prop.getProperty(&quot;username&quot;),prop.getProperty(&quot;password&quot;));</b>
+<i>35</i>&nbsp;
+<b class="nc"><i>36</i>&nbsp;        Repository&lt;Account,String&gt; accountSQLRepo = new AccountSQLRepo(connection);</b>
+<i>37</i>&nbsp;        //ItemSQLRepo itemSQLRepo = new ItemSQLRepo(connection);
+<b class="nc"><i>38</i>&nbsp;        MessageSQLRepo messageSQLRepo = new MessageSQLRepo(connection);</b>
+<b class="nc"><i>39</i>&nbsp;        AccountDetailService accountDetailService = new AccountDetailServiceImp(accountSQLRepo);</b>
+<b class="nc"><i>40</i>&nbsp;        CreationService creationService = new CreationServiceImp((accountDetailService));</b>
+<i>41</i>&nbsp;        //ItemService itemService = new ItemServiceImp(itemSQLRepo);
+<b class="nc"><i>42</i>&nbsp;        MessageService messageService = new MessageServiceImp(messageSQLRepo, accountDetailService);</b>
+<b class="nc"><i>43</i>&nbsp;        ModificationService modificationService = new ModificationServiceImp(accountDetailService);</b>
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;        //context.setAttribute(&quot;itemService&quot;, itemService);
+<b class="nc"><i>46</i>&nbsp;        context.setAttribute(&quot;accountDetailService&quot;,accountDetailService);</b>
+<b class="nc"><i>47</i>&nbsp;        context.setAttribute(&quot;messageService&quot;, messageService);</b>
+<b class="nc"><i>48</i>&nbsp;        context.setAttribute(&quot;creationService&quot;, creationService);</b>
+<b class="nc"><i>49</i>&nbsp;        context.setAttribute(&quot;modificationService&quot;, modificationService);</b>
+<i>50</i>&nbsp;    }
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;    @Override
+<i>53</i>&nbsp;    public void contextDestroyed(ServletContextEvent servletContextEvent) {
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;    }
+<i>56</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-08 01:33</div>
+</div>
+</body>
+</html>

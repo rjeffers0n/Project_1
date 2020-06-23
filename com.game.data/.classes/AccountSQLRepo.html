@@ -1,0 +1,379 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: AccountSQLRepo</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../coverage_reports/index.html">all classes</a> ]
+    [ <a href="../index.html">com.game.data</a> ]
+</div>
+
+<h1>Coverage Summary for Class: AccountSQLRepo (com.game.data)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AccountSQLRepo</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (6/ 8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    55.5%
+  </span>
+  <span class="absValue">
+    (81/ 146)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">AccountSQLRepo$$EnhancerByMockitoWithCGLIB$$78504efa</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (6/ 8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    55.5%
+  </span>
+  <span class="absValue">
+    (81/ 146)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.game.data;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.game.models.Account;
+<i>4</i>&nbsp;import com.game.utils.ConnectionUtils;
+<i>5</i>&nbsp;import org.apache.log4j.Logger;
+<i>6</i>&nbsp;import java.sql.Connection;
+<i>7</i>&nbsp;import java.sql.PreparedStatement;
+<i>8</i>&nbsp;import java.sql.ResultSet;
+<i>9</i>&nbsp;import java.sql.SQLException;
+<i>10</i>&nbsp;import java.util.ArrayList;
+<i>11</i>&nbsp;import java.util.List;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;/**
+<i>14</i>&nbsp; * Accesses the account_info in the postgres data base
+<i>15</i>&nbsp; */
+<i>16</i>&nbsp;public class AccountSQLRepo implements Repository&lt;Account, String&gt; {
+<i>17</i>&nbsp;    private ConnectionUtils connectionUtils;
+<b class="fc"><i>18</i>&nbsp;    static final Logger logger = Logger.getLogger(AccountSQLRepo.class);</b>
+<i>19</i>&nbsp;    static final String PEL = &quot;prepared statement not closed&quot;;
+<i>20</i>&nbsp;    static final String REL = &quot;prepared statement not closed&quot;;
+<i>21</i>&nbsp;    static final String CEL = &quot;Connection did not close&quot;;
+<i>22</i>&nbsp;    static final String TABLE = &quot;.Account_Info &quot;;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    /**
+<i>25</i>&nbsp;     * Contructor that passes in the connection utils
+<i>26</i>&nbsp;     * @param connectionUtils connection utilities
+<i>27</i>&nbsp;     */
+<b class="fc"><i>28</i>&nbsp;    public AccountSQLRepo(ConnectionUtils connectionUtils) {</b>
+<b class="fc"><i>29</i>&nbsp;        if (connectionUtils != null) {</b>
+<b class="fc"><i>30</i>&nbsp;            this.connectionUtils = connectionUtils;</b>
+<i>31</i>&nbsp;        }
+<b class="fc"><i>32</i>&nbsp;    }</b>
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    /**
+<i>35</i>&nbsp;     * Finds a account by the username
+<i>36</i>&nbsp;     * @param s username
+<i>37</i>&nbsp;     * @return account
+<i>38</i>&nbsp;     */
+<i>39</i>&nbsp;    @Override
+<i>40</i>&nbsp;    public Account findById(String s) {
+<b class="fc"><i>41</i>&nbsp;        Account temp = null;</b>
+<b class="fc"><i>42</i>&nbsp;        Connection connection = null;</b>
+<b class="fc"><i>43</i>&nbsp;        PreparedStatement ps = null;</b>
+<b class="fc"><i>44</i>&nbsp;        ResultSet rs = null;</b>
+<i>45</i>&nbsp;        try {
+<b class="fc"><i>46</i>&nbsp;            connection = connectionUtils.getConnection();</b>
+<b class="fc"><i>47</i>&nbsp;            String schemaName = connectionUtils.getDefaultSchema();</b>
+<b class="fc"><i>48</i>&nbsp;            String sql = &quot;select password, email, friends, credits from &quot; + schemaName + &quot;.Account_Info where username = ?;&quot;;</b>
+<b class="fc"><i>49</i>&nbsp;            ps = connection.prepareStatement(sql);</b>
+<b class="fc"><i>50</i>&nbsp;            ps.setString(1,s);</b>
+<b class="fc"><i>51</i>&nbsp;            rs = ps.executeQuery();</b>
+<b class="fc"><i>52</i>&nbsp;            while(rs.next()) {</b>
+<b class="fc"><i>53</i>&nbsp;                temp = new Account(s,rs.getString(&quot;password&quot;).trim(),</b>
+<b class="fc"><i>54</i>&nbsp;                        rs.getString(&quot;email&quot;).trim(),rs.getString(&quot;friends&quot;).trim(),rs.getInt(&quot;credits&quot;));</b>
+<i>55</i>&nbsp;            }
+<b class="nc"><i>56</i>&nbsp;        } catch (SQLException e) {</b>
+<b class="nc"><i>57</i>&nbsp;            logger.info(&quot;SQL find by id failed&quot;, e);</b>
+<i>58</i>&nbsp;        }
+<i>59</i>&nbsp;        finally {
+<b class="fc"><i>60</i>&nbsp;            if (rs != null) {</b>
+<i>61</i>&nbsp;                try {
+<b class="fc"><i>62</i>&nbsp;                    rs.close();</b>
+<b class="fc"><i>63</i>&nbsp;                } catch (SQLException e) { logger.info(REL, e); }</b>
+<i>64</i>&nbsp;            }
+<b class="fc"><i>65</i>&nbsp;            if (ps != null) {</b>
+<i>66</i>&nbsp;                try {
+<b class="fc"><i>67</i>&nbsp;                    ps.close();</b>
+<b class="fc"><i>68</i>&nbsp;                } catch (SQLException e) { logger.info(PEL, e); }</b>
+<i>69</i>&nbsp;            }
+<b class="fc"><i>70</i>&nbsp;            if (connection != null) {</b>
+<i>71</i>&nbsp;                try {
+<b class="fc"><i>72</i>&nbsp;                    connection.close();</b>
+<b class="fc"><i>73</i>&nbsp;                } catch (SQLException e) { logger.info(CEL, e); }</b>
+<i>74</i>&nbsp;            }
+<b class="nc"><i>75</i>&nbsp;        }</b>
+<b class="fc"><i>76</i>&nbsp;        return temp;</b>
+<i>77</i>&nbsp;    }
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;    /**
+<i>80</i>&nbsp;     * No longer used for project as is would take up too much memory instantiating all the account
+<i>81</i>&nbsp;     * @return returns a list of the accounts
+<i>82</i>&nbsp;     */
+<i>83</i>&nbsp;    @Override
+<i>84</i>&nbsp;    public List&lt;Account&gt; findAll() {
+<i>85</i>&nbsp;        //reuse code from flashcard project
+<b class="nc"><i>86</i>&nbsp;        Connection connection = null;</b>
+<b class="nc"><i>87</i>&nbsp;        PreparedStatement ps = null;</b>
+<b class="nc"><i>88</i>&nbsp;        ResultSet rs = null;</b>
+<b class="nc"><i>89</i>&nbsp;        List&lt;Account&gt; Account_Info = new ArrayList&lt;&gt;();</b>
+<i>90</i>&nbsp;        try {
+<b class="nc"><i>91</i>&nbsp;            connection = connectionUtils.getConnection();</b>
+<b class="nc"><i>92</i>&nbsp;            String schemaName = connectionUtils.getDefaultSchema();</b>
+<b class="nc"><i>93</i>&nbsp;            String sql = &quot;Select username, password, credits, email, friends from &quot; + schemaName + TABLE;</b>
+<b class="nc"><i>94</i>&nbsp;            ps = connection.prepareStatement(sql);</b>
+<b class="nc"><i>95</i>&nbsp;            rs = ps.executeQuery();</b>
+<i>96</i>&nbsp;            Account temp;
+<b class="nc"><i>97</i>&nbsp;            while(rs.next()) {</b>
+<b class="nc"><i>98</i>&nbsp;                temp = new Account(rs.getString(&quot;username&quot;).trim(),rs.getString(&quot;password&quot;).trim(),</b>
+<b class="nc"><i>99</i>&nbsp;                        rs.getString(&quot;email&quot;).trim(),rs.getString(&quot;friends&quot;),rs.getInt(&quot;credits&quot;));</b>
+<i>100</i>&nbsp;
+<b class="nc"><i>101</i>&nbsp;                Account_Info.add(temp);</b>
+<i>102</i>&nbsp;            }
+<b class="nc"><i>103</i>&nbsp;        } catch (SQLException e) {</b>
+<b class="nc"><i>104</i>&nbsp;            logger.info(&quot;SQL find all failed&quot;, e);</b>
+<i>105</i>&nbsp;        }
+<i>106</i>&nbsp;        finally {
+<b class="nc"><i>107</i>&nbsp;            if (rs != null) {</b>
+<i>108</i>&nbsp;                try {
+<b class="nc"><i>109</i>&nbsp;                    rs.close();</b>
+<b class="nc"><i>110</i>&nbsp;                } catch (SQLException e) { logger.info(REL, e); }</b>
+<i>111</i>&nbsp;            }
+<b class="nc"><i>112</i>&nbsp;            if (ps != null) {</b>
+<i>113</i>&nbsp;                try {
+<b class="nc"><i>114</i>&nbsp;                    ps.close();</b>
+<b class="nc"><i>115</i>&nbsp;                } catch (SQLException e) { logger.info(PEL, e); }</b>
+<i>116</i>&nbsp;            }
+<b class="nc"><i>117</i>&nbsp;            if (connection != null) {</b>
+<i>118</i>&nbsp;                try {
+<b class="nc"><i>119</i>&nbsp;                    connection.close();</b>
+<b class="nc"><i>120</i>&nbsp;                } catch (SQLException e) { logger.info(CEL, e); }</b>
+<i>121</i>&nbsp;            }
+<b class="nc"><i>122</i>&nbsp;        }</b>
+<b class="nc"><i>123</i>&nbsp;        return Account_Info;</b>
+<i>124</i>&nbsp;    }
+<i>125</i>&nbsp;
+<i>126</i>&nbsp;    /**
+<i>127</i>&nbsp;     * Gives list of IDs to check against if an account exist
+<i>128</i>&nbsp;     * @return ArrayList of IDs
+<i>129</i>&nbsp;     */
+<i>130</i>&nbsp;    @Override
+<i>131</i>&nbsp;    public List&lt;String&gt; findAllID() {
+<i>132</i>&nbsp;        //reuse code from flashcard project
+<b class="nc"><i>133</i>&nbsp;        Connection connection = null;</b>
+<b class="nc"><i>134</i>&nbsp;        PreparedStatement ps = null;</b>
+<b class="nc"><i>135</i>&nbsp;        ResultSet rs = null;</b>
+<b class="nc"><i>136</i>&nbsp;        List&lt;String&gt; idList = new ArrayList&lt;&gt;();</b>
+<i>137</i>&nbsp;
+<i>138</i>&nbsp;        try {
+<b class="nc"><i>139</i>&nbsp;            connection = connectionUtils.getConnection();</b>
+<b class="nc"><i>140</i>&nbsp;            String schemaName = connectionUtils.getDefaultSchema();</b>
+<b class="nc"><i>141</i>&nbsp;            String sql = &quot;Select username from &quot; + schemaName + TABLE;</b>
+<b class="nc"><i>142</i>&nbsp;            ps = connection.prepareStatement(sql);</b>
+<b class="nc"><i>143</i>&nbsp;            rs = ps.executeQuery();</b>
+<b class="nc"><i>144</i>&nbsp;            while(rs.next()) {</b>
+<b class="nc"><i>145</i>&nbsp;                idList.add(rs.getString(&quot;username&quot;));</b>
+<i>146</i>&nbsp;            }
+<b class="nc"><i>147</i>&nbsp;        } catch (SQLException e) {</b>
+<b class="nc"><i>148</i>&nbsp;            logger.info(&quot;SQL find all by ID failed&quot;, e);</b>
+<i>149</i>&nbsp;        }
+<i>150</i>&nbsp;        finally {
+<b class="nc"><i>151</i>&nbsp;            if (rs != null) {</b>
+<i>152</i>&nbsp;                try {
+<b class="nc"><i>153</i>&nbsp;                    rs.close();</b>
+<b class="nc"><i>154</i>&nbsp;                } catch (SQLException e) { logger.info(REL, e); }</b>
+<i>155</i>&nbsp;            }
+<b class="nc"><i>156</i>&nbsp;            if (ps != null) {</b>
+<i>157</i>&nbsp;                try {
+<b class="nc"><i>158</i>&nbsp;                    ps.close();</b>
+<b class="nc"><i>159</i>&nbsp;                } catch (SQLException e) { logger.info(PEL, e); }</b>
+<i>160</i>&nbsp;            }
+<b class="nc"><i>161</i>&nbsp;            if (connection != null) {</b>
+<i>162</i>&nbsp;                try {
+<b class="nc"><i>163</i>&nbsp;                    connection.close();</b>
+<b class="nc"><i>164</i>&nbsp;                } catch (SQLException e) { logger.info(CEL, e); }</b>
+<i>165</i>&nbsp;            }
+<b class="nc"><i>166</i>&nbsp;        }</b>
+<b class="nc"><i>167</i>&nbsp;        return idList;</b>
+<i>168</i>&nbsp;    }
+<i>169</i>&nbsp;
+<i>170</i>&nbsp;    /**
+<i>171</i>&nbsp;     * Insert a new record with corresponding username, password, and credits
+<i>172</i>&nbsp;     * as the account object that is passed in
+<i>173</i>&nbsp;     * @param obj account object
+<i>174</i>&nbsp;     */
+<i>175</i>&nbsp;    @Override
+<i>176</i>&nbsp;    public void save(Account obj) {
+<b class="fc"><i>177</i>&nbsp;        PreparedStatement ps = null;</b>
+<b class="fc"><i>178</i>&nbsp;        Connection connection = null;</b>
+<i>179</i>&nbsp;        try {
+<b class="fc"><i>180</i>&nbsp;            connection = connectionUtils.getConnection();</b>
+<b class="fc"><i>181</i>&nbsp;            String schemaName = connectionUtils.getDefaultSchema();</b>
+<b class="fc"><i>182</i>&nbsp;            String sql = &quot;insert into &quot; + schemaName + TABLE +</b>
+<i>183</i>&nbsp;                    &quot;(username,password,email) values (?,?,?);&quot;;
+<b class="fc"><i>184</i>&nbsp;            ps = connection.prepareStatement(sql);</b>
+<b class="fc"><i>185</i>&nbsp;            ps.setString(1,obj.getName());</b>
+<b class="fc"><i>186</i>&nbsp;            ps.setString(2,obj.getPassword());</b>
+<b class="fc"><i>187</i>&nbsp;            ps.setString(3,obj.getEmail());</b>
+<b class="fc"><i>188</i>&nbsp;            ps.executeUpdate();</b>
+<b class="nc"><i>189</i>&nbsp;        } catch (SQLException e) {</b>
+<b class="nc"><i>190</i>&nbsp;            logger.info(&quot;SQL save failed&quot;, e);</b>
+<i>191</i>&nbsp;        }
+<i>192</i>&nbsp;        finally {
+<b class="fc"><i>193</i>&nbsp;            if (ps != null) {</b>
+<i>194</i>&nbsp;                try {
+<b class="fc"><i>195</i>&nbsp;                    ps.close();</b>
+<b class="fc"><i>196</i>&nbsp;                } catch (SQLException e) { logger.info(PEL, e); }</b>
+<i>197</i>&nbsp;            }
+<b class="fc"><i>198</i>&nbsp;            if (connection != null) {</b>
+<i>199</i>&nbsp;                try {
+<b class="fc"><i>200</i>&nbsp;                    connection.close();</b>
+<b class="fc"><i>201</i>&nbsp;                } catch (SQLException e) { logger.info(CEL, e); }</b>
+<i>202</i>&nbsp;            }
+<b class="nc"><i>203</i>&nbsp;        }</b>
+<b class="fc"><i>204</i>&nbsp;    }</b>
+<i>205</i>&nbsp;
+<i>206</i>&nbsp;    /**
+<i>207</i>&nbsp;     * Finds the record with the same username as the account object.
+<i>208</i>&nbsp;     * Updates the record with the changed field(s) in the account object.
+<i>209</i>&nbsp;     * @param obj Account object
+<i>210</i>&nbsp;     */
+<i>211</i>&nbsp;    @Override
+<i>212</i>&nbsp;    public void update(Account obj, String id) {
+<b class="fc"><i>213</i>&nbsp;        Connection connection = null;</b>
+<b class="fc"><i>214</i>&nbsp;        PreparedStatement ps = null;</b>
+<i>215</i>&nbsp;        try {
+<b class="fc"><i>216</i>&nbsp;            connection = connectionUtils.getConnection();</b>
+<b class="fc"><i>217</i>&nbsp;            String schemaName = connectionUtils.getDefaultSchema();</b>
+<b class="fc"><i>218</i>&nbsp;            List&lt;String&gt; temp = obj.getFriends();</b>
+<b class="fc"><i>219</i>&nbsp;            StringBuilder sline = new StringBuilder();</b>
+<b class="fc"><i>220</i>&nbsp;            for (int i=0;i&lt;temp.size();i++) {</b>
+<b class="nc"><i>221</i>&nbsp;                if(i!=0){</b>
+<b class="nc"><i>222</i>&nbsp;                    sline.append(&quot;,&quot;);</b>
+<i>223</i>&nbsp;                }
+<b class="nc"><i>224</i>&nbsp;                sline.append(temp.get(i));</b>
+<i>225</i>&nbsp;            }
+<b class="fc"><i>226</i>&nbsp;            String sql = &quot;update &quot; + schemaName + TABLE +</b>
+<i>227</i>&nbsp;                    &quot;set password = ?,&quot;+
+<i>228</i>&nbsp;                    &quot;credits = ?,&quot; +
+<i>229</i>&nbsp;                    &quot;friends = ? where &quot; +
+<i>230</i>&nbsp;                    &quot;username = ?;&quot;;
+<b class="fc"><i>231</i>&nbsp;            ps = connection.prepareStatement(sql);</b>
+<b class="fc"><i>232</i>&nbsp;            ps.setString(1,obj.getPassword());</b>
+<b class="fc"><i>233</i>&nbsp;            ps.setInt(2,obj.getBalance());</b>
+<b class="fc"><i>234</i>&nbsp;            ps.setString(3,sline.toString());</b>
+<b class="fc"><i>235</i>&nbsp;            ps.setString(4,obj.getName());</b>
+<b class="fc"><i>236</i>&nbsp;            ps.executeUpdate();</b>
+<b class="nc"><i>237</i>&nbsp;        } catch (SQLException e) {</b>
+<b class="nc"><i>238</i>&nbsp;            logger.info(&quot;SQL update failed&quot;, e);</b>
+<i>239</i>&nbsp;        }
+<i>240</i>&nbsp;        finally {
+<b class="fc"><i>241</i>&nbsp;            if (ps != null) {</b>
+<i>242</i>&nbsp;                try {
+<b class="fc"><i>243</i>&nbsp;                    ps.close();</b>
+<b class="fc"><i>244</i>&nbsp;                } catch (SQLException e) { logger.info(PEL, e); }</b>
+<i>245</i>&nbsp;            }
+<b class="fc"><i>246</i>&nbsp;            if (connection != null) {</b>
+<i>247</i>&nbsp;                try {
+<b class="fc"><i>248</i>&nbsp;                    connection.close();</b>
+<b class="fc"><i>249</i>&nbsp;                } catch (SQLException e) { logger.info(CEL, e); }</b>
+<i>250</i>&nbsp;            }
+<b class="nc"><i>251</i>&nbsp;        }</b>
+<b class="fc"><i>252</i>&nbsp;    }</b>
+<i>253</i>&nbsp;
+<i>254</i>&nbsp;    /**
+<i>255</i>&nbsp;     * Deletes record that has the inputted username
+<i>256</i>&nbsp;     * @param s the username
+<i>257</i>&nbsp;     */
+<i>258</i>&nbsp;    @Override
+<i>259</i>&nbsp;    public void delete(String s) {
+<b class="fc"><i>260</i>&nbsp;        Connection connection = null;</b>
+<b class="fc"><i>261</i>&nbsp;        PreparedStatement ps = null;</b>
+<i>262</i>&nbsp;        try {
+<b class="fc"><i>263</i>&nbsp;            connection = connectionUtils.getConnection();</b>
+<b class="fc"><i>264</i>&nbsp;            String schemaName = connectionUtils.getDefaultSchema();</b>
+<b class="fc"><i>265</i>&nbsp;            String sql = &quot;delete from &quot; + schemaName + TABLE +</b>
+<i>266</i>&nbsp;                    &quot;where username = ?;&quot;;
+<b class="fc"><i>267</i>&nbsp;            ps = connection.prepareStatement(sql);</b>
+<b class="fc"><i>268</i>&nbsp;            ps.setString(1,s);</b>
+<b class="fc"><i>269</i>&nbsp;            ps.executeUpdate();</b>
+<b class="nc"><i>270</i>&nbsp;        } catch (SQLException e) {</b>
+<b class="nc"><i>271</i>&nbsp;            logger.info(&quot;SQL delete failed&quot;, e);</b>
+<i>272</i>&nbsp;        }
+<i>273</i>&nbsp;        finally {
+<b class="fc"><i>274</i>&nbsp;            if (ps != null) {</b>
+<i>275</i>&nbsp;                try {
+<b class="fc"><i>276</i>&nbsp;                    ps.close();</b>
+<b class="fc"><i>277</i>&nbsp;                } catch (SQLException e) { logger.info(PEL, e); }</b>
+<i>278</i>&nbsp;            }
+<b class="fc"><i>279</i>&nbsp;            if (connection != null) {</b>
+<i>280</i>&nbsp;                try {
+<b class="fc"><i>281</i>&nbsp;                    connection.close();</b>
+<b class="fc"><i>282</i>&nbsp;                } catch (SQLException e) { logger.info(CEL, e); }</b>
+<i>283</i>&nbsp;            }
+<b class="nc"><i>284</i>&nbsp;        }</b>
+<b class="fc"><i>285</i>&nbsp;    }</b>
+<i>286</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-08 01:33</div>
+</div>
+</body>
+</html>

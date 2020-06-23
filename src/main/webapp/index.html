@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <title>p1 entry page</title>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/cosmo/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="stylesheet/customstyles.css">
+</head>
+<body>
+<audio id="audio" autoplay loop src="sounds/bensound-epic.mp3"></audio>
+<h1 class="container p-3 my-3 bg-dark text-white">Welcome to P1 Game Portal</h1>
+<!--container-->
+<aside id="container" class="container p-2 bg-white text-dark" >
+    <form method="post" action="login" class="bg-light">
+        <div id="user_group">
+            <label for="username">Username:</label>
+            <input id="username" type="text" name="username" class="form-control" placeholder="Enter username"/>
+        </div>
+        <div id=pass_group">
+            <label for="password">Password:</label>
+            <input id="password" type="password" name="password" class="form-control" placeholder="Enter password"/>
+        </div>
+        <div id="btn_group">
+            <button id="login" class="btn-dark" type="submit">Log in</button>
+            <button id="signup" class="btn-dark" type="submit">Sign up</button>
+        </div>
+    </form>
+<!--    <button id="test" class="btn-dark" type="submit" onclick="location.href='pages/servlet_test.html'">Test</button>-->
+</aside>
+<script>
+  document.querySelector('#login').addEventListener('click', (e) => {
+    let inpt1 = document.querySelector('#username');
+    let inpt2 = document.querySelector('#password');
+    let name = inpt1.value;
+    let password = inpt2.value;
+    if(name.length === 0 || password.length<8 || !/\d/.test(password) || !/[a-z]/.test(password) || !/[A-Z]/.test(password)) {
+        e.preventDefault();
+        alert("Password needs to be >=8 char and contains at least 1 uppercase," +
+            " lowercase and number each. Username should be at least 1 character long.");
+    }
+  });
+  document.querySelector('#signup').addEventListener('click', (e) => {
+    e.preventDefault();
+    location.href="pages/signup.html";
+  });
+  document.getElementById("audio").volume = 0.1;
+</script>
+
+</body>
+</html>

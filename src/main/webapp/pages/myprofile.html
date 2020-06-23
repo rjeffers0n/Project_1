@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Profile</title>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/cosmo/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../stylesheet/customstyles.css">
+</head>
+<body onload="showInfo()">
+<!--header-->
+<h1 class="container p-3 my-3 bg-dark text-white">Welcome to P1 Game Portal</h1>
+<!--container-->
+<aside id="container" class="container p-2 bg-white text-dark" >
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link" href="./portal.html">Portal</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link disabled" href="./store.html">Store</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="./games.html">Games</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link disabled" href="./news.html">News</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="#">My Profile</a>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" onclick="signOff()">Sign Off</button>
+        </li>
+    </ul>
+    <section>
+        <div class="card" >
+            <div method="GET" action="../profile" class="card-body">
+                <h5 id="username" class="card-title">Username</h5>
+                <p class="card-text" id="ajax-content">User info displayed here.</p>
+            </div>
+            <div class="card-body">
+                <h5 id="password" class="card-title">Password</h5>
+                <p class="card-text box" type="password" id="ajax-content2">Password displayed here</p>
+
+                <form method="get" action="../account_edit">
+                    <input type="password" id="new_password" name="new_password" class="form-control" placeholder="Enter password"/>
+                    <button id="changePassword" class="card-link">Change Password</button>
+                </form>
+            </div>
+            <div class="card-body">
+                <h5 id="email" class="card-title">Email</h5>
+                <p class="card-text" id="ajax-content3">Email displayed here</p>
+            </div>
+            <div class="card-body">
+                <h5 id="bankinfo" class="card-title">Bank Account</h5>
+                <p class="card-text" id="ajax-content4">Card Number displayed here</p>
+                <form method="post" action="../account_edit">
+                    <input type="text" id="new_bankinfo" name="new_bankinfo" class="form-control" placeholder="Enter card number"/>
+                    <button id="changeCard" class="card-link">Change Card Info</button>
+                </form>
+            </div>
+            <button id="reload" class="btn-dark" type="button" onclick="showInfo()">Reload</button>
+            <a class="btn-dark" data-toggle="collapse" href="#closePanel">Close Account</a>
+            <div id="closePanel" class="panel-collapse collapse">
+                <button onclick="closeAccount()">Close Account</button>
+            </div>
+        </div>
+    </section>
+</aside>
+<script>
+    function getJSONObj() {
+        http_request=new XMLHttpRequest();
+        try{
+            // Opera 8.0+, Firefox, Chrome, Safari
+            http_request = new XMLHttpRequest();
+        }catch (e) {
+            // Internet Explorer Browsers
+            try{
+                http_request = new ActiveXObject("Msxml2.XMLHTTP");
+            }catch (e) {
+                try{
+                    http_request = new ActiveXObject("Microsoft.XMLHTTP");
+                }catch (e) {
+                    // Something went wrong
+                    alert("Your browser broke!");
+                    return false;
+                }
+            }
+        }
+        http_request.onreadystatechange = function() {
+            if (http_request.readyState === 4 ) {
+                let accountInfo = JSON.parse(http_request.responseText);
+                document.getElementById("ajax-content").innerHTML = accountInfo.username;
+                document.getElementById("ajax-content2").innerHTML = accountInfo.password;
+                document.getElementById("ajax-content3").innerHTML = accountInfo.email;
+                document.getElementById("ajax-content4").innerHTML = accountInfo.cardNumber;
+            }
+        }
+        http_request.open("GET","../profile",true);
+        http_request.send();
+    }
+    function showInfo() {
+        getJSONObj();
+    }
+
+    function closeAccount() {
+        http_request=new XMLHttpRequest();
+        try{
+            // Opera 8.0+, Firefox, Chrome, Safari
+            http_request = new XMLHttpRequest();
+        }catch (e) {
+            // Internet Explorer Browsers
+            try{
+                http_request = new ActiveXObject("Msxml2.XMLHTTP");
+            }catch (e) {
+                try{
+                    http_request = new ActiveXObject("Microsoft.XMLHTTP");
+                }catch (e) {
+                    // Something went wrong
+                    alert("Your browser broke!");
+                    return false;
+                }
+            }
+        }
+        http_request.onreadystatechange = function() {
+            if (http_request.readyState === 4 && http_request.status >= 200 && http_request.status<=300) {
+                console.log("Delete Successful")
+                window.location.href = "../index.html";
+            }
+        }
+        http_request.open("DELETE","../delete");
+        http_request.send();
+    }
+
+    function signOff() {
+        http_request=new XMLHttpRequest();
+        try{
+            // Opera 8.0+, Firefox, Chrome, Safari
+            http_request = new XMLHttpRequest();
+        }catch (e) {
+            // Internet Explorer Browsers
+            try{
+                http_request = new ActiveXObject("Msxml2.XMLHTTP");
+            }catch (e) {
+                try{
+                    http_request = new ActiveXObject("Microsoft.XMLHTTP");
+                }catch (e) {
+                    // Something went wrong
+                    alert("Your browser broke!");
+                    return false;
+                }
+            }
+        }
+        http_request.open("GET","../logout");
+        http_request.send();
+        document.cookie = "cookiename= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+        window.location.href="../";
+    }
+    document.querySelector('#changePassword').addEventListener('click', (e) => {
+        let inpt = document.querySelector('#new_password');
+        let password = inpt.value;
+        if(password.length<8 || !/\d/.test(password) || !/[a-z]/.test(password) || !/[A-Z]/.test(password)) {
+            e.preventDefault();
+            alert("Password needs to be >=8 char and contains at least 1 uppercase, lowercase and number each.");
+        }
+        else {
+
+        }
+    });
+    document.querySelector('#changeCard').addEventListener('click', (e) => {
+        let inpt = document.querySelector('#new_bankinfo');
+        let bankinfo = inpt.value.trim();
+        if(bankinfo.length>=13&&bankinfo.length<=16&&!/^\d$/.test(bankinfo)){
+
+        }
+        else {
+            alert("Bank Info is in an invalid format");
+            e.preventDefault();
+        }
+    });
+</script>
+
+</body>
+</html>

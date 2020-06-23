@@ -1,0 +1,203 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: AccountDetailServiceImp</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../coverage_reports/index.html">all classes</a> ]
+    [ <a href="../index.html">com.game.service.accountservices</a> ]
+</div>
+
+<h1>Coverage Summary for Class: AccountDetailServiceImp (com.game.service.accountservices)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AccountDetailServiceImp</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91.7%
+  </span>
+  <span class="absValue">
+    (11/ 12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91.7%
+  </span>
+  <span class="absValue">
+    (44/ 48)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.game.service.accountservices;
+<i>2</i>&nbsp;import com.game.data.Repository;
+<i>3</i>&nbsp;import com.game.models.Account;
+<i>4</i>&nbsp;import java.util.Collections;
+<i>5</i>&nbsp;import java.util.HashMap;
+<i>6</i>&nbsp;import java.util.List;
+<i>7</i>&nbsp;import java.util.Map;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;public class AccountDetailServiceImp implements AccountDetailService {
+<i>10</i>&nbsp;    List&lt;String&gt; accountList;
+<i>11</i>&nbsp;    Map&lt;String, Account&gt; accountMap;
+<i>12</i>&nbsp;    Repository&lt;Account,String&gt; arepo;
+<i>13</i>&nbsp;
+<b class="fc"><i>14</i>&nbsp;    public AccountDetailServiceImp(Repository&lt;Account, String&gt; accountSQLRepo){</b>
+<b class="fc"><i>15</i>&nbsp;        arepo = accountSQLRepo;</b>
+<b class="fc"><i>16</i>&nbsp;        accountList = arepo.findAllID();</b>
+<b class="fc"><i>17</i>&nbsp;        accountMap = Collections.synchronizedMap(new HashMap&lt;&gt;());</b>
+<b class="fc"><i>18</i>&nbsp;    }</b>
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    @Override
+<i>21</i>&nbsp;    public boolean checkExist(String username) {
+<b class="fc"><i>22</i>&nbsp;        return accountList.contains(username);</b>
+<i>23</i>&nbsp;    }
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    @Override
+<i>26</i>&nbsp;    public Account findByID(String username) {
+<b class="fc"><i>27</i>&nbsp;        return arepo.findById(username);</b>
+<i>28</i>&nbsp;    }
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    @Override
+<i>31</i>&nbsp;    public boolean checkCredentials(String username, String password) {
+<b class="fc"><i>32</i>&nbsp;        Account temp = findByID(username);</b>
+<b class="fc"><i>33</i>&nbsp;        if (temp.getPassword().equals(password)){</b>
+<b class="fc"><i>34</i>&nbsp;            accountMap.put(username,temp);</b>
+<b class="fc"><i>35</i>&nbsp;            return true;</b>
+<i>36</i>&nbsp;        }
+<b class="nc"><i>37</i>&nbsp;        return false;</b>
+<i>38</i>&nbsp;    }
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;    @Override
+<i>41</i>&nbsp;    public Account getAccount(String username) {
+<b class="fc"><i>42</i>&nbsp;        if (accountMap.containsKey(username)) {</b>
+<b class="fc"><i>43</i>&nbsp;            return accountMap.get(username);</b>
+<i>44</i>&nbsp;        }
+<b class="fc"><i>45</i>&nbsp;        return null;</b>
+<i>46</i>&nbsp;    }
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;    @Override
+<i>49</i>&nbsp;    public List&lt;String&gt; getAccountList() {
+<b class="fc"><i>50</i>&nbsp;        return accountList;</b>
+<i>51</i>&nbsp;    }
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    @Override
+<i>54</i>&nbsp;    public boolean addAccount(String username, String password, String email) {
+<b class="fc"><i>55</i>&nbsp;        if (usernameValidations(username)&amp;&amp;passwordValidations(password)){</b>
+<b class="fc"><i>56</i>&nbsp;            Account temp = new Account(username, password, email);</b>
+<b class="fc"><i>57</i>&nbsp;            accountList.add(username);</b>
+<b class="fc"><i>58</i>&nbsp;            arepo.save(temp);</b>
+<b class="fc"><i>59</i>&nbsp;            accountMap.put(username, temp);</b>
+<b class="fc"><i>60</i>&nbsp;            return true;</b>
+<i>61</i>&nbsp;        }
+<b class="fc"><i>62</i>&nbsp;        return false;</b>
+<i>63</i>&nbsp;    }
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;    /**
+<i>66</i>&nbsp;     * Admin level method
+<i>67</i>&nbsp;     * @param username username
+<i>68</i>&nbsp;     * @return
+<i>69</i>&nbsp;     */
+<i>70</i>&nbsp;    @Override
+<i>71</i>&nbsp;    public boolean removeAccount(String username) {
+<b class="fc"><i>72</i>&nbsp;        if (username.equals(&quot;admin&quot;)){</b>
+<i>73</i>&nbsp;            //cannot delete admin account
+<b class="fc"><i>74</i>&nbsp;            return false;</b>
+<i>75</i>&nbsp;        }
+<b class="fc"><i>76</i>&nbsp;        accountList.remove(username);</b>
+<b class="fc"><i>77</i>&nbsp;        accountMap.remove(username);</b>
+<b class="fc"><i>78</i>&nbsp;        arepo.delete(username);</b>
+<b class="fc"><i>79</i>&nbsp;        return true;</b>
+<i>80</i>&nbsp;    }
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    @Override
+<i>83</i>&nbsp;    public void update(Account obj) {
+<b class="fc"><i>84</i>&nbsp;        arepo.update(obj,obj.getName());</b>
+<b class="fc"><i>85</i>&nbsp;    }</b>
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;    @Override
+<i>88</i>&nbsp;    public void logOff(String username) {
+<b class="nc"><i>89</i>&nbsp;        accountMap.remove(username);</b>
+<b class="nc"><i>90</i>&nbsp;    }</b>
+<i>91</i>&nbsp;
+<i>92</i>&nbsp;    @Override
+<i>93</i>&nbsp;    public boolean usernameValidations(String username) {
+<b class="fc"><i>94</i>&nbsp;        return !username.equals(&quot;&quot;) || username.matches(&quot;^[a-zA-Z0-9]*$&quot;);</b>
+<i>95</i>&nbsp;    }
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    @Override
+<i>98</i>&nbsp;    public boolean passwordValidations(String password) {
+<b class="fc"><i>99</i>&nbsp;        if (password.length()&lt;8){</b>
+<b class="nc"><i>100</i>&nbsp;            return false;</b>
+<i>101</i>&nbsp;        }
+<b class="fc"><i>102</i>&nbsp;        char [] newPass = password.toCharArray();</b>
+<b class="fc"><i>103</i>&nbsp;        boolean numCond = false;</b>
+<b class="fc"><i>104</i>&nbsp;        boolean capCond = false;</b>
+<b class="fc"><i>105</i>&nbsp;        boolean undCond = false;</b>
+<b class="fc"><i>106</i>&nbsp;        for (char c:newPass) {</b>
+<b class="fc"><i>107</i>&nbsp;            if (Character.isDigit(c)){</b>
+<b class="fc"><i>108</i>&nbsp;                numCond = true;</b>
+<i>109</i>&nbsp;            }
+<b class="fc"><i>110</i>&nbsp;            if (Character.isUpperCase(c)){</b>
+<b class="fc"><i>111</i>&nbsp;                capCond = true;</b>
+<i>112</i>&nbsp;            }
+<b class="fc"><i>113</i>&nbsp;            if (Character.isLowerCase(c)){</b>
+<b class="fc"><i>114</i>&nbsp;                undCond = true;</b>
+<i>115</i>&nbsp;            }
+<i>116</i>&nbsp;        }
+<b class="fc"><i>117</i>&nbsp;        return numCond&amp;&amp;capCond&amp;&amp;undCond;</b>
+<i>118</i>&nbsp;    }
+<i>119</i>&nbsp;
+<i>120</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-08 01:33</div>
+</div>
+</body>
+</html>
